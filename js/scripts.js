@@ -23,21 +23,21 @@ window.addEventListener('DOMContentLoaded', function() {
 
 	info.addEventListener('click', function(event) {
 		let target = event.target;
+		console.log(target);
 		if(target && target.classList.contains('info-header-tab')) {
 			for(let i = 0; i < tab.length; i++) {
 				if (target == tab[i]) {
 					hideTabContent(0);
 					showTabContent(i);
-					break;
 				}
 			}
 		}
 	});
-	// timer
 
+
+	// timer
 	let deadLine = new Date(2019, 4, 4),
 		deadLineSec = +deadLine;
-		console.log(deadLineSec);
 
 	function getTimeRemaining(endtime) {
 		let t = Date.parse(endtime) - Date.parse(new Date()),
@@ -72,7 +72,6 @@ window.addEventListener('DOMContentLoaded', function() {
 			function updateClock() {
 				let t = getTimeRemaining(endtime),
 					now = +new Date();
-					console.log(now);
 				hours.textContent = t.hours;
 				minutes.textContent = t.minutes;
 				seconds.textContent = t.seconds;
@@ -90,5 +89,36 @@ window.addEventListener('DOMContentLoaded', function() {
 
 
 	setClock('timer', deadLine);
+
+	// modal window
+	let more = document.querySelector('.more'),
+		overlay = document.querySelector('.overlay'),
+		close = document.querySelector('.popup-close'),
+		descr = document.querySelector('.description');
+
+	more.addEventListener('click', function() { // открываем модальное окно
+		overlay.style.display = 'block';
+		this.classList.add('more-splash');
+		document.body.style.overflow = 'hidden';
+	});
+
+	close.addEventListener('click', function() { // закрываем модальное окно
+		overlay.style.display = 'none';
+		more.classList.remove('more-splash');
+		document.body.style.overflow = '';
+	});
+
+	// modal window in tabs
+
+	let mainBox = document.querySelector('.info');
+
+	mainBox.addEventListener('click', function() {
+		let target = event.target;
+		if(target && target.classList.contains('description-btn')) {
+			overlay.style.display = 'block';
+			this.classList.add('more-splash');
+			document.body.style.overflow = 'hidden';
+		}
+	});
 
 }); // -> end scripts
