@@ -21,7 +21,7 @@ window.addEventListener('DOMContentLoaded', function() {
 		}
 	}
 
-	info.addEventListener('click', function(event) {
+	info.addEventListener('click', (event) => {
 		let target = event.target;
 		console.log(target);
 		if(target && target.classList.contains('info-header-tab')) {
@@ -36,7 +36,7 @@ window.addEventListener('DOMContentLoaded', function() {
 
 
 	// timer
-	let deadLine = new Date(2019, 4, 4),
+	let deadLine = new Date(2019, 4, 10),
 		deadLineSec = +deadLine;
 
 	function getTimeRemaining(endtime) {
@@ -96,13 +96,13 @@ window.addEventListener('DOMContentLoaded', function() {
 		close = document.querySelector('.popup-close'),
 		descr = document.querySelector('.description');
 
-	more.addEventListener('click', function() { // открываем модальное окно
+	more.addEventListener('click', () => { // открываем модальное окно
 		overlay.style.display = 'block';
 		this.classList.add('more-splash');
 		document.body.style.overflow = 'hidden';
 	});
 
-	close.addEventListener('click', function() { // закрываем модальное окно
+	close.addEventListener('click', () => { // закрываем модальное окно
 		overlay.style.display = 'none';
 		more.classList.remove('more-splash');
 		document.body.style.overflow = '';
@@ -112,7 +112,7 @@ window.addEventListener('DOMContentLoaded', function() {
 
 	let mainBox = document.querySelector('.info');
 
-	mainBox.addEventListener('click', function() {
+	mainBox.addEventListener('click', () => {
 		let target = event.target;
 		if(target && target.classList.contains('description-btn')) {
 			overlay.style.display = 'block';
