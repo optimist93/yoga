@@ -23,7 +23,6 @@ window.addEventListener('DOMContentLoaded', function() {
 
 	info.addEventListener('click', (event) => {
 		let target = event.target;
-		console.log(target);
 		if(target && target.classList.contains('info-header-tab')) {
 			for(let i = 0; i < tab.length; i++) {
 				if (target == tab[i]) {
@@ -93,12 +92,10 @@ window.addEventListener('DOMContentLoaded', function() {
 	// modal window
 	let more = document.querySelector('.more'),
 		overlay = document.querySelector('.overlay'),
-		close = document.querySelector('.popup-close'),
-		descr = document.querySelector('.description');
+		close = document.querySelector('.popup-close');
 
 	more.addEventListener('click', () => { // открываем модальное окно
 		overlay.style.display = 'block';
-		this.classList.add('more-splash');
 		document.body.style.overflow = 'hidden';
 	});
 
@@ -116,9 +113,95 @@ window.addEventListener('DOMContentLoaded', function() {
 		let target = event.target;
 		if(target && target.classList.contains('description-btn')) {
 			overlay.style.display = 'block';
-			this.classList.add('more-splash');
 			document.body.style.overflow = 'hidden';
 		}
 	});
+
+	// send form
+
+	let message = {
+		loading: 'Загрузка...',
+		success: 'Спасибо! Скоро мы с вами свяжемся!',
+		failure: 'Что-то пошло не так...'
+	};
+
+	let form = document.querySelector('.main-form'),
+		contactForm = document.querySelector('#form'),
+		input = form.getElementsByTagName('input'),
+		inputPhone = document.querySelectorAll('input[type="tel"]'),
+		contactFormInput = contactForm.getElementsByTagName('input'),
+		statusMessage = document.createElement('div');
+
+		for(let i = 0; i < inputPhone.length; i++){ // в инпутах с телефоном вводим только цифры и +
+			inputPhone[i].addEventListener('input', function() {
+				inputPhone[i].value = inputPhone[i].value.replace(/[^\+\d]/g, '');
+			});
+		}
+
+		statusMessage.classList.add('status');
+
+		form.addEventListener('submit', function(event) {
+			event.preventDefault();
+			form.appendChild(statusMessage);
+
+			let request = new XMLHttpRequest();
+			request.open('POST', 'server.php');
+			request.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+
+			let formData = new FormData(form);
+
+			let obj = {};
+			formData.forEach(function(value, key) {
+				obj[key] = value;
+			});
+			let json = JSON.stringify(obj);
+			request.send(json);
+
+			request.addEventListener('readystatechange', function() {
+				if (request.readyState < 4){
+					statusMessage.innerHTML = message.loading;
+				} else if(request.readyState === 4 && request.status === 200) {
+					statusMessage.innerHTML = message.success;
+				} else {
+					statusMessage.innerHTML = message.failure;
+				}
+			});
+
+				for(let i = 0; i < input.length; i++) { // очищаем поля ввода при успешной отправке
+					input[i].value = '';
+				}
+		});
+
+		contactForm.addEventListener('submit', function(event) {
+			event.preventDefault();
+			contactForm.appendChild(statusMessage);
+
+			let request = new XMLHttpRequest();
+			request.open('POST', 'server.php');
+			request.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+
+			let formData = new FormData(contactForm);
+
+			let obj = {};
+			formData.forEach(function(value, key) {
+				obj[key] = value;
+			});
+			let json = JSON.stringify(obj);
+			request.send(json);
+
+			request.addEventListener('readystatechange', function() {
+				if (request.readyState < 4){
+					statusMessage.innerHTML = message.loading;
+				} else if(request.readyState === 4 && request.status === 200) {
+					statusMessage.innerHTML = message.success;
+				} else {
+					statusMessage.innerHTML = message.failure;
+				}
+			});
+			for(let i = 0; i < contactFormInput.length; i++) { // очищаем поля ввода при успешной отправке
+				contactFormInput[i].value = '';
+			}
+
+		});
 
 }); // -> end scripts
