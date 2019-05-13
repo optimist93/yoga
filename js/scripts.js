@@ -121,7 +121,7 @@ window.addEventListener('DOMContentLoaded', function() {
 
 	let message = {
 		loading: 'Загрузка...',
-		success: 'Спасибо! Скоро мы с вами свяжемся!',
+		success: '<img src="../img/success.svg" width="30px" height="30px">',
 		failure: 'Что-то пошло не так...'
 	};
 
