@@ -127,9 +127,7 @@ window.addEventListener('DOMContentLoaded', function() {
 
 	let form = document.querySelector('.main-form'),
 		contactForm = document.querySelector('#form'),
-		input = form.getElementsByTagName('input'),
 		inputPhone = document.querySelectorAll('input[type="tel"]'),
-		contactFormInput = contactForm.getElementsByTagName('input'),
 		statusMessage = document.createElement('div');
 
 		for(let i = 0; i < inputPhone.length; i++){ // в инпутах с телефоном вводим только цифры и +
@@ -137,71 +135,63 @@ window.addEventListener('DOMContentLoaded', function() {
 				inputPhone[i].value = inputPhone[i].value.replace(/[^\+\d]/g, '');
 			});
 		}
-
 		statusMessage.classList.add('status');
 
-		form.addEventListener('submit', function(event) {
+	function sendForm(elem) {
+		elem.addEventListener('submit', function(event) {
 			event.preventDefault();
-			form.appendChild(statusMessage);
+			elem.appendChild(statusMessage);
+			let input = elem.getElementsByTagName('input');
+			let formData = new FormData(elem);
+			statusMessage.style.display = 'block';
+		
+			function postData(data){
+				return new Promise(function(resolve,reject) {
+					let request = new XMLHttpRequest();
+					request.open('POST', 'server.php');
+					request.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
 
-			let request = new XMLHttpRequest();
-			request.open('POST', 'server.php');
-			request.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+					request.addEventListener('readystatechange', function() {
+						if (request.readyState < 4){
+							resolve();
+						} else if(request.readyState === 4 && request.status === 200) {
+							resolve();
+						} else {
+							reject();
+						}
 
-			let formData = new FormData(form);
+					});
 
-			let obj = {};
-			formData.forEach(function(value, key) {
-				obj[key] = value;
-			});
-			let json = JSON.stringify(obj);
-			request.send(json);
+					let obj = {};
+					formData.forEach(function(value, key) {
+						obj[key] = value;
+					});
+					let json = JSON.stringify(obj);
+					request.send(json);
 
-			request.addEventListener('readystatechange', function() {
-				if (request.readyState < 4){
-					statusMessage.innerHTML = message.loading;
-				} else if(request.readyState === 4 && request.status === 200) {
-					statusMessage.innerHTML = message.success;
-				} else {
-					statusMessage.innerHTML = message.failure;
-				}
-			});
+				});
+			} // postData
 
-				for(let i = 0; i < input.length; i++) { // очищаем поля ввода при успешной отправке
+			function clearInput(){ // очищаем поля ввода при успешной отправке
+				for(let i = 0; i < input.length; i++) { 
 					input[i].value = '';
 				}
-		});
-
-		contactForm.addEventListener('submit', function(event) {
-			event.preventDefault();
-			contactForm.appendChild(statusMessage);
-
-			let request = new XMLHttpRequest();
-			request.open('POST', 'server.php');
-			request.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
-
-			let formData = new FormData(contactForm);
-
-			let obj = {};
-			formData.forEach(function(value, key) {
-				obj[key] = value;
-			});
-			let json = JSON.stringify(obj);
-			request.send(json);
-
-			request.addEventListener('readystatechange', function() {
-				if (request.readyState < 4){
-					statusMessage.innerHTML = message.loading;
-				} else if(request.readyState === 4 && request.status === 200) {
-					statusMessage.innerHTML = message.success;
-				} else {
-					statusMessage.innerHTML = message.failure;
-				}
-			});
-			for(let i = 0; i < contactFormInput.length; i++) { // очищаем поля ввода при успешной отправке
-				contactFormInput[i].value = '';
 			}
 
+			postData(formData)
+				.then(()=> statusMessage.innerHTML = message.loading)
+				.then(()=> {
+					statusMessage.innerHTML = message.success;
+					setTimeout(()=> { // удаляем сообщение об отправке через 5 секунд
+						statusMessage.style.display = 'none';
+					}, 5000);
+				})
+				.catch(()=> statusMessage.innerHTML = message.failure)
+				.then(clearInput);
 		});
+	} // end sendForm
 
+	sendForm(form);
+	sendForm(contactForm);
+		
 }); // -> end scripts
