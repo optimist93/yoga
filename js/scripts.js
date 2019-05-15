@@ -35,7 +35,7 @@ window.addEventListener('DOMContentLoaded', function() {
 
 
 	// timer
-	let deadLine = new Date(2019, 4, 10),
+	let deadLine = new Date(2019, 4, 20),
 		deadLineSec = +deadLine;
 
 	function getTimeRemaining(endtime) {
@@ -193,5 +193,105 @@ window.addEventListener('DOMContentLoaded', function() {
 
 	sendForm(form);
 	sendForm(contactForm);
+
+	// slider
+
+	let slideIndex = 1, // текущий слайд
+		slides = document.querySelectorAll('.slider-item'), // все слайды
+		prev = document.querySelector('.prev'),
+		next = document.querySelector('.next'),
+		dotsWrap = document.querySelector('.slider-dots'),
+		dots = document.querySelectorAll('.dot');
+
+		showSlides(slideIndex);
+		function showSlides(n) {
+
+			if (n > slides.length) { // когда перелистываем последний слайд, возвращаемся на первый
+				slideIndex = 1;
+			}
+			if (n < 1) {
+				slideIndex = slides.length;
+			}
+			slides.forEach((item) => item.style.display = 'none');
+			dots.forEach((item) => item.classList.remove('dot-active'));
+
+			slides[slideIndex - 1].style.display = 'block';
+			dots[slideIndex - 1].classList.add('dot-active');
+		} // show slides
+
+		function plusSlides(n) {
+			showSlides(slideIndex += n);
+		}
+		function currentSlide(n){
+			showSlides(slideIndex = n);
+		}
+
+		prev.addEventListener('click', function() {
+			plusSlides(-1);
+		});
+		next.addEventListener('click', function() {
+			plusSlides(1);
+		});
+
+		dotsWrap.addEventListener('click', function(event) {
+			for (let i = 0; i < dots.length + 1; i++) {
+				if(event.target.classList.contains('dot') && event.target == dots[i-1]) {
+					currentSlide(i);
+				}
+			}
+		});
+
+		// calculator
+
+		let inputs = document.querySelectorAll('.counter-block-input'),
+			persons = document.querySelectorAll('.counter-block-input')[0],
+			restDays = document.querySelectorAll('.counter-block-input')[1],
+			place = document.getElementById('select'),
+			totalValue = document.getElementById('total'),
+			personsSum = 0,
+			daysSum = 0,
+			total = 0;
+
+			totalValue.innerHTML = 0;
+
+			inputs.forEach(function(item) {  // вводим только цифры
+				item.addEventListener('input', function() {
+					item.value = item.value.replace(/[^\d]/g, '');
+				});
+			});
+
+			persons.addEventListener('change', function() {
+				personsSum = +this.value;
+				total = (daysSum + personsSum)*4000;
+				if(restDays.value == '') {
+					totalValue.innerHTML = 0;
+				} else if(personsSum == '') {
+					totalValue.innerHTML = 0;
+				} else {
+					totalValue.innerHTML = total;
+				}
+			});
+
+			restDays.addEventListener('change', function() {
+				daysSum = +this.value;
+				total = (daysSum + personsSum)*4000;
+
+				if(persons.value == '') {
+					totalValue.innerHTML = 0;
+				} else if (daysSum == '') {
+					totalValue.innerHTML = 0;
+				} else {
+					totalValue.innerHTML = total;
+				}
+			});
+
+			place.addEventListener('change', function() {
+				if(restDays.value == '' || persons.value == '') {
+					totalValue.innerHTML = 0;
+				} else {
+					let a = total;
+					totalValue.innerHTML = a * this.options[this.selectedIndex].value;
+				}
+			});
 		
 }); // -> end scripts
