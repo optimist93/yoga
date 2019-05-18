@@ -1,0 +1,30 @@
+{
+  "name": "yoga",
+  "version": "1.0.0",
+  "description": "[посмотреть сайт](https://optimist93.github.io/yoga/)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/optimist93/yoga.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/optimist93/yoga/issues"
+  },
+  "homepage": "https://github.com/optimist93/yoga#readme",
+  "devDependencies": {
+    "@babel/core": "^7.4.4",
+    "@babel/preset-env": "^7.4.4",
+    "babel-loader": "^8.0.6",
+    "babel-plugin-es6-promise": "^1.1.1",
+    "es6-promise": "^4.2.6",
+    "formdata-polyfill": "^3.0.18",
+    "nodelist-foreach-polyfill": "^1.2.0",
+    "webpack": "^4.31.0",
+    "webpack-cli": "^3.3.2"
+  }
+}
