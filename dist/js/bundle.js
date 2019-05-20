@@ -1575,22 +1575,24 @@ function calculator() {
   inputs.forEach(function (item) {
     // вводим только цифры
     item.addEventListener('input', function () {
-      item.value = item.value.replace(/[^\d]/g, '');
+      if (item.value.match(/[^0-9]|^0{1}/g)) {
+        item.value = '';
+      }
     });
   });
-  persons.addEventListener('change', function () {
+  persons.addEventListener('input', function () {
     personsSum = +this.value;
     total = (daysSum + personsSum) * 4000;
 
     if (restDays.value == '') {
       totalValue.innerHTML = 0;
-    } else if (personsSum == '') {
+    } else if (personsSum == '' || personsSum == 0) {
       totalValue.innerHTML = 0;
     } else {
       totalValue.innerHTML = total;
     }
   });
-  restDays.addEventListener('change', function () {
+  restDays.addEventListener('input', function () {
     daysSum = +this.value;
     total = (daysSum + personsSum) * 4000;
 
@@ -1602,7 +1604,7 @@ function calculator() {
       totalValue.innerHTML = total;
     }
   });
-  place.addEventListener('change', function () {
+  place.addEventListener('input', function () {
     if (restDays.value == '' || persons.value == '') {
       totalValue.innerHTML = 0;
     } else {
