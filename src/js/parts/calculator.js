@@ -11,7 +11,7 @@ function calculator(){
 	totalValue.innerHTML = 0;
 
 	inputs.forEach(function(item) {  // вводим только цифры
-		item.addEventListener('input', function() {
+		item.addEventListener('input', () => {
 			item.value = item.value.replace(/[^\d]/g, '');
 		});
 	});

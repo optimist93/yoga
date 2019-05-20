@@ -1,7 +1,7 @@
-//require('es6-promise').polyfill();
+
 require('nodelist-foreach-polyfill');
 require('formdata-polyfill');
-window.addEventListener('DOMContentLoaded', function() {
+window.addEventListener('DOMContentLoaded', () => {
 	'use strict';
 
 	let tabs = require('./parts/tabs.js'),

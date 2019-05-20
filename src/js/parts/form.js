@@ -8,30 +8,34 @@ function form(){
 	let form = document.querySelector('.main-form'),
 		contactForm = document.querySelector('#form'),
 		inputPhone = document.querySelectorAll('input[type="tel"]'),
-		statusMessage = document.createElement('div');
+		statusMessage = document.createElement('div'),
+		close = document.querySelector('.popup-close');
 
 		for(let i = 0; i < inputPhone.length; i++){ // в инпутах с телефоном вводим только цифры и +
-			inputPhone[i].addEventListener('input', function() {
+			inputPhone[i].addEventListener('input', () => {
 				inputPhone[i].value = inputPhone[i].value.replace(/[^\+\d]/g, '');
 			});
 		}
 		statusMessage.classList.add('status');
-
 	function sendForm(elem) {
-		elem.addEventListener('submit', function(event) {
+		elem.addEventListener('submit', (event) => {
 			event.preventDefault();
 			elem.appendChild(statusMessage);
 			let input = elem.getElementsByTagName('input');
 			let formData = new FormData(elem);
 			statusMessage.style.display = 'block';
+
+			close.addEventListener('click', () => { // закрываем модальное окно
+				statusMessage.style.display = 'none';
+			});
 		
 			function postData(data){
-				return new Promise(function(resolve,reject) {
+				return new Promise((resolve,reject) => {
 					let request = new XMLHttpRequest();
 					request.open('POST', 'server.php');
 					request.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
 
-					request.addEventListener('readystatechange', function() {
+					request.addEventListener('readystatechange', () => {
 						if (request.readyState < 4){
 							resolve();
 						} else if(request.readyState === 4 && request.status === 200) {
@@ -43,7 +47,7 @@ function form(){
 					});
 
 					let obj = {};
-					formData.forEach(function(value, key) {
+					formData.forEach((value, key) => {
 						obj[key] = value;
 					});
 					let json = JSON.stringify(obj);
@@ -56,6 +60,7 @@ function form(){
 				for(let i = 0; i < input.length; i++) { 
 					input[i].value = '';
 				}
+				
 			}
 
 			postData(formData)

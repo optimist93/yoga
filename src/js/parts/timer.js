@@ -1,5 +1,5 @@
 function timer(){
-	let deadLine = new Date(2019, 4, 20),
+	let deadLine = new Date(2019, 4, 25),
 		deadLineSec = +deadLine;
 
 	function getTimeRemaining(endtime) {

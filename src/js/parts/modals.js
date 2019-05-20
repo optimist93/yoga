@@ -1,8 +1,8 @@
 function modals(){
 	// modal window
 	let more = document.querySelector('.more'),
-	overlay = document.querySelector('.overlay'),
-	close = document.querySelector('.popup-close');
+		overlay = document.querySelector('.overlay'),
+		close = document.querySelector('.popup-close');
 
 	more.addEventListener('click', () => { // открываем модальное окно
 		overlay.style.display = 'block';

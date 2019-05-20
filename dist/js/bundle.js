@@ -1634,7 +1634,8 @@ function form() {
   var form = document.querySelector('.main-form'),
       contactForm = document.querySelector('#form'),
       inputPhone = document.querySelectorAll('input[type="tel"]'),
-      statusMessage = document.createElement('div');
+      statusMessage = document.createElement('div'),
+      close = document.querySelector('.popup-close');
 
   var _loop = function _loop(i) {
     // в инпутах с телефоном вводим только цифры и +
@@ -1656,6 +1657,10 @@ function form() {
       var input = elem.getElementsByTagName('input');
       var formData = new FormData(elem);
       statusMessage.style.display = 'block';
+      close.addEventListener('click', function () {
+        // закрываем модальное окно
+        statusMessage.style.display = 'none';
+      });
 
       function postData(data) {
         return new _Promise(function (resolve, reject) {
@@ -1870,7 +1875,7 @@ module.exports = tabs;
 /***/ (function(module, exports) {
 
 function timer() {
-  var deadLine = new Date(2019, 4, 20),
+  var deadLine = new Date(2019, 4, 25),
       deadLineSec = +deadLine;
 
   function getTimeRemaining(endtime) {
@@ -1938,7 +1943,6 @@ module.exports = timer;
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-//require('es6-promise').polyfill();
 __webpack_require__(/*! nodelist-foreach-polyfill */ "./node_modules/nodelist-foreach-polyfill/index.js");
 
 __webpack_require__(/*! formdata-polyfill */ "./node_modules/formdata-polyfill/formdata.min.js");
